@@ -2,6 +2,7 @@ import axios from "axios"
 import React,{useEffect, useState} from "react"
 import { useNavigate } from "react-router-dom"
 import Carousel from "./Carousel";
+import Footer from "./Footer";
 
 
 const Getproduct =()=>{
@@ -14,7 +15,7 @@ const Getproduct =()=>{
     const getproducts = async()=>{
         setLoading("Please wait...")
         try {
-           const response=await axios.get("http://matthiashiggs.alwaysdata.net/api/getproducts")
+           const response=await axios.get("https://matthiashiggs.alwaysdata.net/api/getproducts")
             setProducts(response.data)
             setLoading("")
         } catch (error) {
@@ -28,7 +29,7 @@ const Getproduct =()=>{
     },[])
     console.log(products)
     
-    const imagepath="http://matthiashiggs.alwaysdata.net/static/images/"
+    const imagepath="https://matthiashiggs.alwaysdata.net/static/images/"
     return(
        <div className="row">
         {/* carousel goes here */}
@@ -41,7 +42,13 @@ const Getproduct =()=>{
         {products.map(singleproduct=>(
 
             <div className="col-md-3 mb-4">
-                <div className=" card  shadow h=100px d-flex flex-column" >
+                <div className=" card  shadow h=100px d-flex flex-column" style={{
+                 backgroundColor: "#1A1A1B", // Gunmetal Grey
+                 border: "1px solid #333", // Subtle dark border
+                 borderRadius: "15px",
+                 overflow: "hidden",
+                 transition: "transform 0.3s ease, border-color 0.3s ease"
+             }}>
 
             {/* image goes here */}
             <img src={imagepath + singleproduct.product_photo} alt="" className="card-img-top w-100" style={{height:"200px",objectFit: "contain"}} />
@@ -54,6 +61,8 @@ const Getproduct =()=>{
                 </div>
         </div>
         ))}
+        {/* Footer goes here */}
+        <Footer/>
        </div>
     )
 }

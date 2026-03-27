@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import axios from "axios"
 const Mpesapayment =()=>{
     const {singleproduct} = useLocation().state || {}
-    const imagepath="http://matthiashiggs.alwaysdata.net/static/images/"
+    const imagepath="https://matthiashiggs.alwaysdata.net/static/images/"
     // declare states here
     const [phone,setPhone]=useState("")
     const [loading,setLoading]=useState("")
@@ -18,7 +18,7 @@ const Mpesapayment =()=>{
             formdata.append("amount",singleproduct.product_cost)
             formdata.append("phone",phone)
             try {
-                const response=await axios.post("http://matthiashiggs.alwaysdata.net/api/mpesa_payment",formdata)
+                const response=await axios.post("https://matthiashiggs.alwaysdata.net/api/mpesa_payment",formdata)
                 setSuccess(response.data.message)
                 setLoading("")
             } catch (error) {

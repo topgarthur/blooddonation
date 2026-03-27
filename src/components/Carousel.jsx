@@ -11,24 +11,19 @@ const Carousel = () => {
                         {/* <!-- div with image 1  --> */}
                           <div className="carousel-item active">
                             <img
-                              src="images/9fc3045e-6e22-4e42-983f-f1f51144a5f8.png"
+                              src="images/4.jpeg"
                               className="d-block w-100"
-                              alt="streetwear drip" style={{height:"750px", width:"1000px", objectFit:"contain"} }
+                              alt="streetwear drip" style={{height:'500px', width:"100%"}}
                             />
 
-                            <div className="carousel-caption hero-caption text-start">
-                              <h1>Unleash Your Drip</h1>
-                              <p>Premium thrifted fashion at unbeatable prices</p>
-                              <button className="btn btn-primary px-4">Shop Now</button>
-                            </div>
+                            
                           </div>
                          {/* <!-- div with image 2  --> */}
                           <div className="carousel-item">
                             <div className="text-slide d-flex align-items-center justify-content-center">
                                   
                                <div className="text-center">
-                                  <h1 className="text-white">Rare Fits. No Repeats.</h1>
-                                  <p className="text-light">Exclusive thrift pieces. Only one of each.</p>
+                                  <img src="images/1.png" alt="" style={{height:'500px', width:"100%"}} />
                                   <button className="btn btn-primary mt-3 px-4">Shop Now</button>
                                   </div>
 
@@ -36,20 +31,17 @@ const Carousel = () => {
                               </div>
                           {/* <!-- div with image 3  --> */}
                            <div className="carousel-item">
-                            <img
-                              src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c"
-                              className="d-block w-100"
-                              alt="streetwear style"style={{height:"700px", width:"00px", objectFit:"cover"} }
-                            />
+                            <img src="images/2.png" alt="" style={{height:'500px', width:"100%"}} />
 
-                            <div className="carousel-caption hero-caption text-start">
-                              <h1>Wear Your Story.</h1>
-                              <p>Every piece tells something different.</p>
-                              <button className="btn btn-primary px-4">Explore</button>
-                            </div>
                           </div>
                           
                            </div>
+                           <div className="carousel-item">
+                            <img src="images/3.png" alt="" style={{height:'500px', width:"100%"}} />
+
+                          </div>
+                          
+                           
                      {/* <!-- previous control  --> */}
                       <a href="#mycarousel" class="carousel-control-prev"data-bs-slide="prev">
                         <span class="carousel-control-prev-icon bg-danger"></span>
