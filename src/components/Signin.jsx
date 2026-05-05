@@ -1,62 +1,62 @@
-import axios from "axios"
-import React, { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const Signin =()=>{
-    let navigate = useNavigate();
-    // declare the 2 states here
-    const[email,setEmail]= useState("")
-    const[password, setPassword]= useState("")
-    const[loading,setLoading]= useState("")
-    const[success,setSuccess]=useState("")
-    const[Error,setError]= useState("")
-    // function to handle submit
-    const handlesubmit =async (e)=>{
-       e.preventDefault ()
-        setLoading("Please wait...")
-        // create empty envelope
-        const formdata = new FormData()
-        // append
-        formdata.append("email", email)
-        formdata.append("password", password)
-        try {
-            const response =await axios.post("https://higgs.alwaysdata.net/api/signin",formdata)
-            setSuccess(response.data.message)
-            setLoading("")
-            // if login/signinis successful we save user to local storage 
-            // NB: redirect user to homepage(get products)
-            if (response.data.user){
-                // login success
-                localStorage.setItem("user",JSON.stringify(response.data.user))
-                // redirect the user to homepage
-                navigate("/")
-            }else {
-                // login failed
-                setSuccess(response.data.message)
-            }
-        } catch (error) {
-            setError(error.message)
-            setLoading("")
-        }
-    }
-    return(
-       <div className="row mt-4 justify-content-center">
-        <div className="col-md-6 card shadow p-4">
-          <h1>Sign in</h1>
-          
-          {/* Bind the states here  */}
-           <h2 className="text-warning">{loading}</h2>
-           <h2 className="text-success">{success}</h2>
-           <h2 className="text-danger">{Error}</h2>
-        
-          <form action="" onSubmit={handlesubmit}>
-            <input type="email" className="form-control" placeholder="Email" onChange={(e)=>setEmail(e.target.value)}/><br/>
-            <input type="text" className="form-control" placeholder="Password" onChange={(e)=>setPassword(e.target.value)}/><br/>
-            <button type="Submit" className="btn btn-success w-100">Sign in</button>
-            <p>Don't have an account?<Link to="/signup">Sign Up</Link></p>
+const Signin = () => {
+  const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("bdn_user", JSON.stringify({ email, password }));
+    setMessage("Sign in successful. You can now manage donation activity.");
+    navigate("/");
+  };
+
+  return (
+    <div className="row justify-content-center">
+      <div className="col-lg-6">
+        <div className="card bdn-card p-4 p-md-5">
+          <h2 className="fw-bold mb-3">Volunteer Sign In</h2>
+          <p className="mb-4">
+            Access blood requests and donor coordination in one place.
+          </p>
+          {message && <div className="alert bdn-alert">{message}</div>}
+          <form onSubmit={handleSubmit} className="row g-3">
+            <div className="col-12">
+              <input
+                type="email"
+                className="form-control bdn-input"
+                placeholder="Enter Email"
+
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="col-12">
+              <input
+                type="password"
+                className="form-control bdn-input"
+                placeholder="Enter Password"
+
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="col-12">
+              <button type="submit" className="btn bdn-btn w-100">
+                Sign In
+              </button>
+            </div>
           </form>
+          <p className="mt-3 mb-0 small">
+            Not registered as a donor? <Link to="/register-donor">Sign Up</Link>
+          </p>
         </div>
-       </div>
-    )
-}
-export default Signin
+      </div>
+    </div>
+  );
+};
+
+export default Signin;

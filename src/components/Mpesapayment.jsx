@@ -1,57 +1,119 @@
-import { useLocation } from "react-router-dom"
-import React, { useState } from "react"
-import axios from "axios"
-const Mpesapayment =()=>{
-    const {singleproduct} = useLocation().state || {}
-    const imagepath="https://matthiashiggs.alwaysdata.net/static/images/"
-    // declare states here
-    const [phone,setPhone]=useState("")
-    const [loading,setLoading]=useState("")
-    const [success,setSuccess]=useState("")
-    const [error,setError]=useState("")
-    // function to make payment
-    const handlesubmit= async(e)=>{
-        e.preventDefault()
-        setLoading("Please wait...")
-            const formdata=new FormData()
-            // append
-            formdata.append("amount",singleproduct.product_cost)
-            formdata.append("phone",phone)
-            try {
-                const response=await axios.post("https://matthiashiggs.alwaysdata.net/api/mpesa_payment",formdata)
-                setSuccess(response.data.message)
-                setLoading("")
-            } catch (error) {
-                setError("Something went wrong")
-                setLoading("")
-            }
-                
-            }
+import React, { useState } from "react";
 
-    return(
-       <div className="row justify-content-center">
-        <h1 className="text-success">Make Payment - Lipa na Mpesa </h1>
-        <div className="col-md-8 card shadow p-4">
-            <img src={imagepath + singleproduct.product_photo} alt="" className="w-100" style={{height:"auto",objectFit: "contain"}} />
-            
-            <div className="card-body">
-                
-                <h1 className="text-info text-start">{singleproduct.product_name}</h1>
-                <p className="text-start">{singleproduct.product_description}</p>
-                <b className="text- warning text-start d-block">Ksh {singleproduct.product_cost}</b><br />
-                {/* bind the states here */}
-                 <h2 className="text-warning">{loading}</h2>
-                 <h2 className="text-success">{success}</h2>
-                 <h2 className="text-danger">{error}</h2>
-                
-                <form action="" onSubmit={handlesubmit}>
-                    <input type="number" className="form-control" placeholder="Enter phone number 254XXXXXXXXX"  onChange={(e)=>setPhone(e.target.value)}/><br />
-                    <button type="submit" className="btn btn-outline-success w-100">Make Payment</button>
-                </form>
+const Mpesapayment = () => {
+  const [schedule, setSchedule] = useState({
+    donorName: "",
+    bloodGroup: "A+",
+    center: "",
+    date: "",
+    time: "",
+    notes: "",
+  });
+  const [response, setResponse] = useState("");
+
+  const onChange = (e) => {
+    setSchedule((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const existing = JSON.parse(localStorage.getItem("bdn_schedules") || "[]");
+    localStorage.setItem("bdn_schedules", JSON.stringify([schedule, ...existing]));
+    setResponse("Donation appointment booked successfully.");
+    setSchedule({
+      donorName: "",
+      bloodGroup: "A+",
+      center: "",
+      date: "",
+      time: "",
+      notes: "",
+    });
+  };
+
+  return (
+    <div className="row justify-content-center">
+      <div className="col-lg-8">
+        <div className="card bdn-card p-4 p-md-5">
+          <h2 className="fw-bold mb-3">Schedule a Donation</h2>
+          <p className="mb-4">
+            Choose your nearest blood bank and reserve a donation slot.
+          </p>
+          {response && <div className="alert bdn-alert">{response}</div>}
+          <form onSubmit={handleSubmit} className="row g-3">
+            <div className="col-md-6">
+              <input
+                name="donorName"
+                className="form-control bdn-input"
+                placeholder="Donor Name"
+                value={schedule.donorName}
+                onChange={onChange}
+                required
+              />
             </div>
+            <div className="col-md-6">
+              <select
+                name="bloodGroup"
+                className="form-select bdn-input"
+                value={schedule.bloodGroup}
+                onChange={onChange}
+              >
+                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-6">
+              <input
+                name="center"
+                className="form-control bdn-input"
+                placeholder="Donation Center"
+                value={schedule.center}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="date"
+                name="date"
+                className="form-control bdn-input"
+                value={schedule.date}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="time"
+                name="time"
+                className="form-control bdn-input"
+                value={schedule.time}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="col-12">
+              <textarea
+                name="notes"
+                className="form-control bdn-input"
+                placeholder="Additional Notes (optional)"
+                rows="3"
+                value={schedule.notes}
+                onChange={onChange}
+              />
+            </div>
+            <div className="col-12">
+              <button type="submit" className="btn bdn-btn w-100">
+                Confirm Appointment
+              </button>
+            </div>
+          </form>
         </div>
-       </div>
-    )
+      </div>
+    </div>
+  );
+};
 
-}
-export default Mpesapayment
+export default Mpesapayment;

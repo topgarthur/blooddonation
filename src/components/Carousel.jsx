@@ -1,59 +1,43 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Carousel = () => {
   return (
-           <section class="row">
-            <div class="col-md-12">
-                {/* <!-- a division of maintaining carousel content  --> */}
-                 <div class="carousel slide" id="mycarousel" data-bs-ride="carousel">
-                    {/* <!-- division containing images  --> */}
-                     <div class="carousel-inner">
-                        {/* <!-- div with image 1  --> */}
-                          <div className="carousel-item active">
-                            <img
-                              src="images/4.jpeg"
-                              className="d-block w-100"
-                              alt="streetwear drip" style={{height:'500px', width:"100%"}}
-                            />
+    <section className="hero-card mb-4">
+      <div className="row align-items-center g-4">
+        <div className="col-md-8">
+          <p className="badge bdn-badge mb-3">Save lives together</p>
+          <h1 className="display-6 fw-bold mb-3">
+            Join the Blood Donation Network and support your community.
+          </h1>
+          <p className="mb-4">
+            Register as a donor, schedule your next donation, or place an urgent
+            blood request for hospitals and patients in need.
+          </p>
 
-                            
-                          </div>
-                         {/* <!-- div with image 2  --> */}
-                          <div className="carousel-item">
-                            <div className="text-slide d-flex align-items-center justify-content-center">
-                                  
-                               <div className="text-center">
-                                  <img src="images/1.png" alt="" style={{height:'500px', width:"100%"}} />
-                                  <button className="btn btn-primary mt-3 px-4">Shop Now</button>
-                                  </div>
+          <div className="d-flex gap-2 flex-wrap">
+            {/* Button-style Link */}
+            <Link to="/register-donor" className="btn btn-success">
+              Become a Donor
+            </Link>
 
-                                </div>
-                              </div>
-                          {/* <!-- div with image 3  --> */}
-                           <div className="carousel-item">
-                            <img src="images/2.png" alt="" style={{height:'500px', width:"100%"}} />
+            <Link to="/request-blood" className="btn btn-outline-primary">
+              Request Blood
+            </Link>
+          </div>
+        </div>
 
-                          </div>
-                          
-                           </div>
-                           <div className="carousel-item">
-                            <img src="images/3.png" alt="" style={{height:'500px', width:"100%"}} />
+        <div className="col-md-4">
+          <div className="stats-box">
+            <h5 className="fw-bold mb-3">Current Network Impact</h5>
+            <p className="mb-2">2,400+ registered donors</p>
+            <p className="mb-2">580 emergency requests helped</p>
+            <p className="mb-0">34 partner hospitals</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-                          </div>
-                          
-                           
-                     {/* <!-- previous control  --> */}
-                      <a href="#mycarousel" class="carousel-control-prev"data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon bg-danger"></span>
-                      </a>
-                      {/* <!-- next control  --> */}
-                       <a href="#mycarousel" class="carousel-control-next"data-bs-slide="next">
-                        <span class="carousel-control-next-icon bg-danger"></span>
-                       </a>
-                 </div>
-            </div>
-          </section>
-  )
-}
-
-export default Carousel
+export default Carousel;

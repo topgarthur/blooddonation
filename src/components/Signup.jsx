@@ -1,54 +1,168 @@
-import axios from "axios"
-import React, {useState} from "react"
-const Signup =()=>{
-    // Declare our states here
-    const[username, setUsername] = useState("")
-    const[email, setEmail] = useState("")
-    const[phone, setPhone] = useState()
-    const[password,setPassword] = useState("")
-    const[loading,setLoading] =useState("")
-    const[success,setSuccess] = useState("")
-    const[error,setError] = useState("")
-    // function to handle submit 
-    const handlesubmit = async (e) =>{
-        e.preventDefault()
-        setLoading("Please wait...")
-        // create empty digital envolope to store user inputs 
-        const formdata = new FormData ()
-        // append/add 
-        formdata.append ("username", username)
-        formdata.append ("email", email)
-        formdata.append ("password", password)
-        formdata.append ("phone", phone)
-        try {
-            const response=await axios.post("https://higgs.alwaysdata.net/api/signup",formdata)
-            setSuccess(response.data.message)
-            setLoading("")
-        } catch (error) {
-            setError(error.message)
-            setLoading("")
-        }
+import React, { useState } from "react";
+
+const Signup = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    bloodGroup: "A+",
+    county: "",
+    phone: "",
+    email: "",
+    password: "",
+    lastDonationDate: "",
+  });
+  const [strength, setStrength] = useState("");
+  const [message, setMessage] = useState("");
+
+  const onChange = (e) => {
+    if (e.target.name === "password") {
+      checkPasswordStrength(e.target.value);
     }
-    
-    return(
-        <div className="row mt-4 justify-content-center ">
-            <div className="col-md-6 card shadow p-5">
-                <h1>Signup</h1>
-                {/* bind the statess  */}
-                <h2 className="text-warning">{loading}</h2>
-                <h2 className="text-success">{success}</h2>
-                <h2 className="text-danger">{error}</h2>
-                <form action="" onSubmit={handlesubmit}> 
-                <input type="text" className="form-control" placeholder="Enter username" onChange={(e) => setUsername (e.target.value)}/> <br/>
-                <input type="Email" className="form-control" placeholder="Enter Email" onChange={(e) => setEmail(e.target.value)}/> <br/>
-                <input type="text" className="form-control" placeholder="Enter Password" onChange={(e) =>setPassword(e.target.value)} /> <br/>
-                <input type="tel" className="form-control" placeholder="Enter Phone" onChange={(e) => setPhone(e.target.value)} /> <br/>
-                <button type="submit" className="btn btn-danger w-100" >Sign up</button>
-                <p>Already have an account? <a href="Signin">Sign in</a></p>
-                
-                </form>
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const existing = JSON.parse(localStorage.getItem("bdn_donors") || "[]");
+    localStorage.setItem("bdn_donors", JSON.stringify([formData, ...existing]));
+    setMessage("Donor registration submitted successfully.");
+    setFormData({
+      name: "",
+      bloodGroup: "A+",
+      county: "",
+      phone: "",
+      email: "",
+      password: "",
+      lastDonationDate: "",
+    });
+  };
+  const checkPasswordStrength = (password) => {
+    if (!password) {
+      setStrength("");
+    } else if (password.length < 6) {
+      setStrength("Weak");
+    } else if (password.length < 10) {
+      setStrength("Medium");
+    } else {
+      setStrength("Strong");
+    }
+  };
+  return (
+    <div className="row justify-content-center">
+      <div className="col-lg-8">
+        <div className="card bdn-card shadow-sm p-4 p-md-5">
+          <h2 className="fw-bold mb-3">Register as a Donor</h2>
+          <p className="mb-4">
+            Fill this form so hospitals can contact you when your blood type is
+            needed.
+          </p>
+
+          {message && <div className="alert bdn-alert">{message}</div>}
+
+          <form onSubmit={handleSubmit} className="row g-3">
+            <div className="col-md-6">
+              <input
+                type="text"
+                name="name"
+                className="form-control bdn-input"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={onChange}
+                required
+              />
             </div>
+            <div className="col-md-6">
+              <select
+                name="bloodGroup"
+                className="form-select bdn-input"
+                value={formData.bloodGroup}
+                onChange={onChange}
+              >
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div className="col-md-6">
+              <input
+                type="text"
+                name="county"
+                className="form-control bdn-input"
+                placeholder="County"
+                value={formData.county}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <input
+                type="tel"
+                name="phone"
+                className="form-control bdn-input"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <input
+                type="email"
+                name="email"
+                className="form-control bdn-input"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={onChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <input
+                type="password"
+                name="password"
+                className="form-control bdn-input"
+                placeholder="Password"
+                value={formData.password}
+                onChange={onChange}
+                required
+              />
+              {strength && (
+                <small
+                  className={`mt-1 d-block ${
+                    strength === "Weak"
+                      ? "text-danger"
+                      : strength === "Medium"
+                      ? "text-warning"
+                      : "text-success"
+                  }`}
+                >
+                  Password strength: {strength}
+                </small>
+              )}
+            </div>
+            <div className="col-md-6">
+              <input
+                type="date"
+                name="lastDonationDate"
+                className="form-control bdn-input"
+                value={formData.lastDonationDate}
+                onChange={onChange}
+              />
+            </div>
+            <div className="col-12">
+              <button type="submit" className="btn bdn-btn w-100">
+                Register Donor
+              </button>
+            </div>
+          </form>
         </div>
-    )
-}
-export default Signup
+      </div>
+    </div>
+  );
+};
+
+export default Signup;

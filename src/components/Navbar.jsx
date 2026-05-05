@@ -1,33 +1,67 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  return (
-  <section class="row">
-            <div class="col-md-12">
-                {/* <!-- a nav with navbar content  --> */}
-                <nav class="navbar navbar-expand-md bg-dark">
-                    <a href="/" className="navbar-brand text-danger">Drip Vault</a>
-                    <button className="navbar-toggler" data-bs-target="#navbarcollapse" data-bs-toggle="collapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    {/* <!-- a division containing the links  --> */}
-                    <div class="collapse navbar-collapse" id="navbarcollapse">
-                        <div class="navbar-nav">
-                            <a href="/" class="nav-link">Home</a>
-                            <a href="/addproduct" class="nav-link">Add Product</a>
-                            <a href="/signin" class="nav-link">Signin</a>
-                            <a href="/signup" class="nav-link">Signup</a>
-                            
-                        </div>
-                        <div className='ms-auto'>
-                          <Link to="/signup" className="btn btn-primary px-3" badge>Join</Link>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </section>
-  )
-}
+  const [user, setUser] = useState(null);
 
-export default Navbar
+  useEffect(() => {
+    const loggedUser = JSON.parse(localStorage.getItem("bdn_user"));
+    setUser(loggedUser);
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem("bdn_user");
+    setUser(null);
+  };
+
+  return (
+    <nav className="navbar navbar-expand-lg bdn-navbar px-3 px-md-4">
+      <Link to="/" className="navbar-brand fw-bold">
+        Blood Donation Network
+      </Link>
+
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarLinks"
+      >
+        <span className="navbar-toggler-icon" />
+      </button>
+
+      <div className="collapse navbar-collapse" id="navbarLinks">
+        <div className="navbar-nav">
+          <Link to="/" className="nav-link">
+            Home
+          </Link>
+          <Link to="/register-donor" className="nav-link">
+            Register Donor
+          </Link>
+          <Link to="/request-blood" className="nav-link">
+            Request Blood
+          </Link>
+          <Link to="/schedule-donation" className="nav-link">
+            Schedule Donation
+          </Link>
+        </div>
+
+        <div className="ms-auto d-flex align-items-center gap-2">
+          {user ? (
+            <>
+              <span className="small text-light">Welcome, {user.name}</span>
+              <button onClick={logout} className="btn bdn-btn-outline btn-sm">
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link to="/signin" className="btn bdn-btn btn-sm px-3">
+              Sign In
+            </Link>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
