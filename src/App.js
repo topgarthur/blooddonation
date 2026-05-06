@@ -10,6 +10,9 @@ import Signup from "./components/Signup";
 import Adddonors from "./components/Adddonors";
 import Mpesapayment from "./components/Mpesapayment";
 import Signin from "./components/Signin";
+import InfoPage from "./components/InfoPage";
+import ScheduleDonation from "./components/ScheduleDonation";
+
 
 function App() {
   return (
@@ -21,8 +24,13 @@ function App() {
             <Route path="/" element={<Donors />} />
             <Route path="/register-donor" element={<Signup />} />
             <Route path="/request-blood" element={<Adddonors />} />
-            <Route path="/schedule-donation" element={<Mpesapayment />} />
+            <Route path="/schedule-donation" element={<ScheduleDonation />} />
+            <Route path="/lipa-na-mpesa" element={<Mpesapayment />} />
             <Route path="/signin" element={<Signin />} />
+            
+            <Route path="/about" element={<InfoPage type="about" />} />
+            <Route path="/contact" element={<InfoPage type="contact" />} />
+            <Route path="/faqs" element={<InfoPage type="faqs" />} />
           </Routes>
         </main>
         <Footer />

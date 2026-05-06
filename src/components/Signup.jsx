@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     bloodGroup: "A+",
@@ -12,6 +14,7 @@ const Signup = () => {
   });
   const [strength, setStrength] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const onChange = (e) => {
     if (e.target.name === "password") {
@@ -22,8 +25,36 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
+    if (formData.password.length < 6) {
+      setError("Password should have at least 6 characters.");
+      return;
+    }
+    if (!/^2547\d{8}$/.test(formData.phone)) {
+      setError("Phone must be in this format: 2547XXXXXXXX.");
+      return;
+    }
     const existing = JSON.parse(localStorage.getItem("bdn_donors") || "[]");
+    const duplicateDonor = existing.some(
+      (donor) => donor.email === formData.email || donor.phone === formData.phone
+    );
+    if (duplicateDonor) {
+      setError("A donor with this email or phone already exists.");
+      return;
+    }
     localStorage.setItem("bdn_donors", JSON.stringify([formData, ...existing]));
+    const users = JSON.parse(localStorage.getItem("bdn_users") || "[]");
+    const userExists = users.some((user) => user.email === formData.email);
+    if (!userExists) {
+      localStorage.setItem(
+        "bdn_users",
+        JSON.stringify([{ name: formData.name, email: formData.email, password: formData.password }, ...users])
+      );
+    }
+    localStorage.setItem(
+      "bdn_user",
+      JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
+    );
     setMessage("Donor registration submitted successfully.");
     setFormData({
       name: "",
@@ -34,6 +65,7 @@ const Signup = () => {
       password: "",
       lastDonationDate: "",
     });
+    navigate("/");
   };
   const checkPasswordStrength = (password) => {
     if (!password) {
@@ -49,7 +81,7 @@ const Signup = () => {
   return (
     <div className="row justify-content-center">
       <div className="col-lg-8">
-        <div className="card bdn-card shadow-sm p-4 p-md-5">
+        <div className="card bdn-card auth-card shadow-sm p-4 p-md-5">
           <h2 className="fw-bold mb-3">Register as a Donor</h2>
           <p className="mb-4">
             Fill this form so hospitals can contact you when your blood type is
@@ -57,6 +89,7 @@ const Signup = () => {
           </p>
 
           {message && <div className="alert bdn-alert">{message}</div>}
+          {error && <div className="alert alert-danger">{error}</div>}
 
           <form onSubmit={handleSubmit} className="row g-3">
             <div className="col-md-6">
@@ -154,11 +187,14 @@ const Signup = () => {
               />
             </div>
             <div className="col-12">
-              <button type="submit" className="btn bdn-btn w-100">
+              <button type="submit" className="btn bdn-btn btn-outline-success w-100">
                 Register Donor
               </button>
             </div>
           </form>
+          <p className="mt-3 mb-0 small">
+            Already have an account? <Link to="/signin">Sign In</Link>
+          </p>
         </div>
       </div>
     </div>
